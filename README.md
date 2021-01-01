@@ -66,4 +66,5 @@ Password: toor
 [![](https://img.shields.io/badge/-Instagram-%23E1306C)](https://www.instagram.com/salaheddine.zkara/?hl=en)
 
 ![GitHub followers](https://img.shields.io/github/followers/Salah-Zkara?style=social)
-#### supervisor: Johri Mustapha
+#### Supervisors: Johri Mustapha(GUI)
+####              Ziad Lamiae(Databases)
