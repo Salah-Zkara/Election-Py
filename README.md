@@ -16,7 +16,7 @@
 To Download this software clone this repositorie or Download it as zip.
 ```bash
 git clone https://github.com/Salah-Zkara/Election-Py.git
-cd Election-Mini-Projet
+cd Election-Py
 ```
 
 ## Requirements
