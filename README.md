@@ -15,7 +15,7 @@
 ## Download
 To Download this software clone this repositorie or Download it as zip.
 ```bash
-git clone https://github.com/Salah-Zkara/Election-Mini-Projet.git
+git clone https://github.com/Salah-Zkara/Election-Py.git
 cd Election-Mini-Projet
 ```
 
@@ -67,5 +67,5 @@ Password: toor
 
 ![GitHub followers](https://img.shields.io/github/followers/Salah-Zkara?style=social)
 #### Supervisors: 
-#### -            Johri Mustapha(GUI)
-#### -            Ziad Lamiae(Databases)
+- **Johri Mustapha(GUI)**
+- **Ziad Lamiae(Databases)**
