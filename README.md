@@ -38,13 +38,11 @@ to run the program you have to install the required modules so open the terminal
 
 `$ pip3 install -r requirements.txt`
 ## Execution
-you can modify the elected persons in the file "candidats.txt" in the root folder for the command version, and in ".resources->candidats.txt" for GUI version.
-### Commands
-`$ python mini_projet.py`
-
-**or** 
-
-`$ python3 mini_projet.py`
+you can modify the elected persons with the Election2020_GUI_Admin interface.
+```
+Login: root
+Password: toor
+```
 ### GUI
 #### - Windows
 `$ python Election2020_GUI.py`
