@@ -1,3 +1,2 @@
-matplotlib==3.2.1
-numpy==1.18.2
 Pillow==7.1.0
+cx-Oracle==8.1.0
