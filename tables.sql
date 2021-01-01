@@ -27,6 +27,8 @@ INSERT INTO candidats
 VALUES('C2','MOHCINE','OUCHEN');
 INSERT INTO candidats
 VALUES('C3','FATIMA','EL JAMILI');
+INSERT INTO candidats
+VALUES('C4','blanc','blanc');
 
 CREATE TABLE stats(
 	CODE VARCHAR2(3) NOT NULL, 
@@ -38,6 +40,8 @@ ADD (CONSTRAINT pk_stats
 PRIMARY KEY(CODE),
 CONSTRAINT fk_stats
 FOREIGN Key (CODE) REFERENCES candidats(CODE));
+
+
 
 
 /*

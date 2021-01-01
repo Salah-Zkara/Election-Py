@@ -34,7 +34,6 @@ def Query_DB(query):
 def Inser_DB(stm):
 	connection_string = "system/salah2001@localhost/SALZKARA"
 	connection = None
-	res = None
 	try:
 		#create connection
 		connection = cx_Oracle.connect(connection_string)
@@ -51,7 +50,6 @@ def Inser_DB(stm):
 			#print("OK")
 			cur.close()
 			connection.close()
-		return res
 
 
 
@@ -128,18 +126,15 @@ def Liste_Candidat():
 	for line in F:
 		R+=line[0]+" -->  "+line[1]+" "+line[2]+'\n'
 		i+=1
-	R+='C'+str(i)+" -->  blanc\n"
+	#R+='C'+str(i)+" -->  blanc\n"
 	tkinter.messagebox.showinfo("Liste des candidats",R)
 	return i
 
 def Statistiques():
-	A=open('./.resources/result.bin','rb')
-	mypick=pickle.Unpickler(A)
-	D=mypick.load()
-	A.close()
-	n=0
-	for k in D:
-		n+=D[k]
+	D = DB_Dic()
+
+
+	n=Query_DB("SELECT SUM(POINTS) FROM stats")[0][0]
 	if(n==0) :
 		n=1
 	A = Query_DB("SELECT * FROM candidats")
@@ -148,9 +143,7 @@ def Statistiques():
 	for a in A:
 		R+=a[1]+" "+a[2]+"  --> "+str(D['C'+str(i)])+" votes "+str(D['C'+str(i)]*100/n)+"%"+'\n'
 		i+=1
-	R+="blanc  --> "+str(D['C'+str(i)])+" votes "+str(D['C'+str(i)]*100/n)+"\n"
 	tkinter.messagebox.showinfo("Statistiques",R)
-
 
 
 def Vote():
@@ -171,21 +164,18 @@ def Vote():
 					return False
 				l[-1]='NO'
 				def click2():
-					window5.destroy()
-					A=open('./.resources/result.bin','rb')
-					mypick=pickle.Unpickler(A)
-					D=mypick.load()
-					A.close()
+					window5.destroy()		
+					D = DB_Dic()
 					choice=v.get()
-					D[choice]+=1
-					A=open('./.resources/result.bin','wb')
-					mypick2=pickle.Pickler(A)
-					mypick2.dump(D)
-					A.close()
-					tkinter.messagebox.showinfo("ALERT!!","Merci pour votre vote!")
-
-					stm = f"UPDATE personnes SET STATUS='NO' WHERE LOGIN='{l[2]}'"
-					Inser_DB(stm)
+					if choice in D:
+						D[choice]+=1
+						stm = f"UPDATE stats SET POINTS = '{D[choice]}' WHERE CODE = '{choice}'"
+						Inser_DB(stm)
+						tkinter.messagebox.showinfo("ALERT!!","Merci pour votre vote!")
+						stm = f"UPDATE personnes SET STATUS='NO' WHERE LOGIN='{l[2]}'"
+						Inser_DB(stm)
+					else:
+						tkinter.messagebox.showinfo("ALERT!!","Contact your administrator to clear results!")
 
 		if(u==0) :
 			tkinter.messagebox.showinfo("ALERT!!","code ou mot de passe incorrecte!")
@@ -199,7 +189,7 @@ def Vote():
 		#window5.geometry("225x200")
 		Label(window5,text="veuillez votez pour votre candidat",bg=background_color).pack()
 		values={}
-		for i in range(1,n+1):
+		for i in range(1,n):
 			C='C'+str(i)
 			values[C]=C
 
@@ -232,35 +222,36 @@ def Dic_candidat():
 	for line in C:
 		i+=1
 		c.append(line[0])
-	c.append('C'+str(i))
 	D={}
 	for e in c:
 		D[e]=0
 	return D
 
+
+
+
+def Dic_candidat_DB(D = Dic_candidat()):
+	Inser_DB("DELETE FROM stats")
+	for e in D:
+		stm = f"INSERT INTO stats VALUES('{e}','{D[e]}','NO')"
+		Inser_DB(stm)
+
+
+def DB_Dic():
+	A = Query_DB("SELECT CODE,POINTS FROM stats")
+	D={}
+	for a in A:
+		D[a[0]] = a[1]
+	return D
+
 def clear_():
 	D=Dic_candidat()
-	A=open('./.resources/result.bin','wb')
-	mypick2=pickle.Pickler(A)
-	mypick2.dump(D)
-	A.close()
+	Dic_candidat_DB()
 	Inser_DB("UPDATE personnes SET STATUS='OK'")
 	tkinter.messagebox.showinfo("ALERT!!","Les résultats sont mis à zéro.\ntous les membres puissent voter à nouveau!!")
 
-def load():
-	D=Dic_candidat()
-	A=open('./.resources/result.bin','rb')
-	mypick=pickle.Unpickler(A)
-	D1=mypick.load()
-	A.close()
-	D.update(D1)
-	A=open('./.resources/result.bin','wb')
-	mypick2=pickle.Pickler(A)
-	mypick2.dump(D)
-	A.close()
 
 def prcp_gui(background_color):
-	load()
 	window.resizable(0, 0)
 	Button(window,font=button_font,fg="white",bg=button_color,width=20,text="Inscription",command=Inscription).place(x=20,y=170)
 	Button(window,font=button_font,fg="white",bg=button_color,width=20,text="Liste codes --> candidat",command=Liste_Candidat).place(x=420,y=170)
@@ -281,4 +272,5 @@ photo=ImageTk.PhotoImage(imge)
 lab=Label(image=photo,bg=background_color)
 lab.place(x=272,y=20)
 prcp_gui(background_color)
+DB_Dic()
 window.mainloop()
