@@ -6,9 +6,6 @@ from PIL import ImageTk, Image
 import tkinter.messagebox
 import cx_Oracle
 
-
-
-
 def Query_DB(query):
 	connection_string = "system/salah2001@localhost/SALZKARA"
 	connection = None
@@ -31,8 +28,6 @@ def Query_DB(query):
 		if connection:
 			connection.close()
 		return res,flag
-
-
 
 def Inser_DB(stm):
 	connection_string = "system/salah2001@localhost/SALZKARA"
@@ -57,8 +52,6 @@ def Inser_DB(stm):
 			cur.close()
 			connection.close()
 		return flag
-
-
 
 def Add_Elected():
 	def Inscription_(Lname,Fname):
@@ -124,10 +117,8 @@ def Liste_Candidat():
 		tkinter.messagebox.showinfo("ERROR!!",str(flag))
 
 
-
-
 def Delete_cand():
-	def click2():
+	def click():
 		i = 0
 		j = 0
 		for e in D:
@@ -155,11 +146,9 @@ def Delete_cand():
 	window5.title("Candidats")
 	window5.iconbitmap('./.resources/vote.ico')
 	window5.configure(background=background_color)
-	#window5.geometry("225x200")
 	Label(window5,text="veuillez selectionnez les candidats a supprimer",bg=background_color).pack()
 	D = {}
 	A = []
-	#n
 
 	text,flag = Query_DB("SELECT code FROM candidats")
 	if flag == True:
@@ -176,19 +165,24 @@ def Delete_cand():
 
 	Button(window5,font="none 9 italic",fg="white",bg="black",text="SELECT ALL",command=sel_all).pack(side = 'left',padx = 10)
 	Button(window5,font="none 9 italic",fg="white",bg="black",text="DESELECT ALL",command=dsel_all).pack(side = 'right',padx = 10)
-	Button(window5,font="none 9 italic",fg="white",bg="black",text="DELETE",command=click2).pack(padx=15,pady=15)
+	Button(window5,font="none 9 italic",fg="white",bg="black",text="DELETE",command=click).pack(padx=15,pady=15)
 	window5.mainloop()
 
 
-'''
 def Delete_users():
-	def click3():
+	def click():
+		i = 0
+		j = 0
 		for e in D:
 			if D[e].get() == 1:
+				j += 1
 				stm = f"DELETE FROM personnes WHERE login = '{e}' "
 				flag = Inser_DB(stm)
 				if flag != True:
+					i +=1
 					tkinter.messagebox.showinfo("ERROR!!",str(flag))
+		j = j - i
+		tkinter.messagebox.showinfo("ALERT!!",str(j)+" utilisateurs supprimer avec succès")
 		window5.destroy()
 		
 	def sel_all():
@@ -198,29 +192,31 @@ def Delete_users():
 		for a in A:
     			a.deselect()
 	
-	n=Liste_Candidat()
 	window5 = Toplevel()
 	window5.resizable(0, 0)
-	window5.title("Candidats")
+	window5.title("Utilisateurs")
 	window5.iconbitmap('./.resources/vote.ico')
 	window5.configure(background=background_color)
-	#window5.geometry("225x200")
-	Label(window5,text="veuillez selectionnez les candidats a supprimer",bg=background_color).pack()
+	Label(window5,text="veuillez selectionnez les utilisateurs a supprimer",bg=background_color).pack()
 	D = {}
 	A = []
-	#n
-	for i in range(1,n):
-		text='C'+str(i)
-		D[text] = IntVar()
-		A.append(Checkbutton(window5,bg=background_color, text = text,variable = D[text],onvalue = 1,offvalue = 0 ))
-		A[i-1].pack(side = TOP, ipady = 5)
+
+	text,flag = Query_DB("SELECT login FROM personnes")
+	if flag == True:
+		i = 0
+		for a in text:
+			t = a[0]
+			D[t] = IntVar()
+			A.append(Checkbutton(window5,bg=background_color, text = t,variable = D[t],onvalue = 1,offvalue = 0 ))
+			A[i].pack(side = TOP, ipady = 5)
+			i+=1
+	else:
+		tkinter.messagebox.showinfo("ERROR!!",str(flag))
 
 	Button(window5,font="none 9 italic",fg="white",bg="black",text="SELECT ALL",command=sel_all).pack(side = 'left',padx = 10)
 	Button(window5,font="none 9 italic",fg="white",bg="black",text="DESELECT ALL",command=dsel_all).pack(side = 'right',padx = 10)
-	Button(window5,font="none 9 italic",fg="white",bg="black",text="DELETE",command=click2).pack(padx=15,pady=15)
+	Button(window5,font="none 9 italic",fg="white",bg="black",text="DELETE",command=click).pack(padx=15,pady=15)
 	window5.mainloop()
-'''
-
 
 
 def Dic_candidat():
@@ -236,8 +232,6 @@ def Dic_candidat():
 			D[e]=0
 		return D
 	return False
-
-
 
 
 def Dic_candidat_DB(D = Dic_candidat()):
@@ -273,7 +267,7 @@ def prcp_gui(background_color):
 	Button(window,font=button_font,fg="white",bg=button_color,width=20,text="Ajouter un candidat",command=Add_Elected).place(x=20,y=170)
 	Button(window,font=button_font,fg="white",bg=button_color,width=20,text="Liste: code --> candidat",command=Liste_Candidat).place(x=420,y=170)
 	Button(window,font=button_font,fg="white",bg=button_color,width=20,text="Supprimer les candidats",command=Delete_cand).place(x=20,y=220)
-	#Button(window,font=button_font,fg="white",bg=button_color,width=20,text="Supprimer les utilisateurs",command=Delete_users).place(x=420,y=225)
+	Button(window,font=button_font,fg="white",bg=button_color,width=20,text="Supprimer les utilisateurs",command=Delete_users).place(x=420,y=225)
 	Button(window,font=button_font,fg="white",bg=button_color,width=20,text="Clear Result",command=clear_).place(x=220,y=280)
 
 
@@ -291,16 +285,4 @@ photo=ImageTk.PhotoImage(imge)
 lab=Label(image=photo,bg=background_color)
 lab.place(x=272,y=20)
 prcp_gui(background_color)
-
-
-
-
-
-
-
-
-
-
-
-
 window.mainloop()
