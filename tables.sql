@@ -21,14 +21,6 @@ ALTER TABLE candidats
 ADD CONSTRAINT pk_candidats
 PRIMARY KEY(CODE);
 
-INSERT INTO candidats
-VALUES('C1','YAHYA','KHARBANE');
-INSERT INTO candidats
-VALUES('C2','MOHCINE','OUCHEN');
-INSERT INTO candidats
-VALUES('C3','FATIMA','EL JAMILI');
-INSERT INTO candidats
-VALUES('C4','blanc','blanc');
 
 CREATE TABLE stats(
 	CODE VARCHAR2(3) NOT NULL, 
@@ -42,6 +34,19 @@ CONSTRAINT fk_stats
 FOREIGN Key (CODE) 
 REFERENCES candidats(CODE)
 ON DELETE CASCADE);
+
+
+
+/*
+INSERT INTO candidats
+VALUES('C1','YAHYA','KHARBANE');
+INSERT INTO candidats
+VALUES('C2','MOHCINE','OUCHEN');
+INSERT INTO candidats
+VALUES('C3','FATIMA','EL JAMILI');
+INSERT INTO candidats
+VALUES('C4','blanc','blanc');*/
+
 
 
 

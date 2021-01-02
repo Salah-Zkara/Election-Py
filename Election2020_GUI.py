@@ -38,30 +38,33 @@ def Inscription():
 			window2.destroy()
 		else:
 			num,flag = Query_DB("SELECT COUNT(*) FROM personnes")
-			i=int(num[0][0])+1
-			if(i<10) :
-				code='E00'+str(i)
-			elif(i<100):
-				code='E0'+str(i)
+			if flag == True:
+				i=int(num[0][0])+1
+				if(i<10) :
+					code='E00'+str(i)
+				elif(i<100):
+					code='E0'+str(i)
+				else:
+					code='E'+str(i)
+				paswd=randomPass()
+				stm = f"INSERT INTO personnes VALUES('{Lname}','{Fname}','{code}','{str(md5(paswd.encode()).hexdigest())}','OK')"
+				Inser_DB(stm)
+				
+				window4= Toplevel()
+				window4.geometry("250x100")
+				window4.title("INFO!!")
+				window4.resizable(0,0)
+				window4.configure(background=background_color)
+				Label(window4,text="inscription réussie",bg=background_color).pack()
+				output= Text(window4,width=25,height=10,wrap=WORD,background=background_color)
+				output.pack()
+				m="Login: "+code+"\nPassword: "+paswd
+				output.insert(END,m)
+				window2.destroy()
+				window4.iconbitmap('./.resources/Team-Male.ico')
+				window4.mainloop()
 			else:
-				code='E'+str(i)
-			paswd=randomPass()
-			stm = f"INSERT INTO personnes VALUES('{Lname}','{Fname}','{code}','{str(md5(paswd.encode()).hexdigest())}','OK')"
-			Inser_DB(stm)
-			
-			window4= Toplevel()
-			window4.geometry("250x100")
-			window4.title("INFO!!")
-			window4.resizable(0,0)
-			window4.configure(background=background_color)
-			Label(window4,text="inscription réussie",bg=background_color).pack()
-			output= Text(window4,width=25,height=10,wrap=WORD,background=background_color)
-			output.pack()
-			m="Login: "+code+"\nPassword: "+paswd
-			output.insert(END,m)
-			window2.destroy()
-			window4.iconbitmap('./.resources/Team-Male.ico')
-			window4.mainloop()
+				tkinter.messagebox.showinfo("ERROR!!",str(flag))
 	window2 =Toplevel()
 	window2.title("Inscription")
 	window2.configure(background="#32a6a8")
@@ -79,14 +82,17 @@ def Inscription():
 
 def Liste_Candidat():
 	F,flag=Query_DB("SELECT * FROM candidats")
-	i=1
-	R=""
-	for line in F:
-		R+=line[0]+" -->  "+line[1]+" "+line[2]+'\n'
-		i+=1
-	#R+='C'+str(i)+" -->  blanc\n"
-	tkinter.messagebox.showinfo("Liste des candidats",R)
-	return i
+	if flag == True:
+		i=1
+		R=""
+		for line in F:
+			R+=line[0]+" -->  "+line[1]+" "+line[2]+'\n'
+			i+=1
+		#R+='C'+str(i)+" -->  blanc\n"
+		tkinter.messagebox.showinfo("Liste des candidats",R)
+		return i
+	else:
+		tkinter.messagebox.showinfo("ERROR!!",str(flag))
 
 def Statistiques():
 	D = DB_Dic()
@@ -113,30 +119,32 @@ def Vote():
 		paswd=str(md5(textentry2.get().upper().encode()).hexdigest())
 		window3.destroy()
 		F,flag=Query_DB("SELECT * FROM personnes")
-		u=0
-		for line in F:
-			l = list(line)
-			if(l[-3]==code) and (l[-2]==paswd) :
-				u=1
-				tkinter.messagebox.showinfo("INFO","Bienvenue "+l[1]+" "+l[0])
-				if(l[-1]!='OK') :
-					tkinter.messagebox.showinfo("ALERT!!","vous avez deja voté!!! ")
-					return False
-				l[-1]='NO'
-				def click2():
-					window5.destroy()		
-					D = DB_Dic()
-					choice=v.get()
-					if choice in D:
-						D[choice]+=1
-						stm = f"UPDATE stats SET POINTS = '{D[choice]}' WHERE CODE = '{choice}'"
-						Inser_DB(stm)
-						tkinter.messagebox.showinfo("ALERT!!","Merci pour votre vote!")
-						stm = f"UPDATE personnes SET STATUS='NO' WHERE LOGIN='{l[2]}'"
-						Inser_DB(stm)
-					else:
-						tkinter.messagebox.showinfo("ALERT!!","Contact your administrator to clear results!")
-
+		if flag == True:
+			u=0
+			for line in F:
+				l = list(line)
+				if(l[-3]==code) and (l[-2]==paswd) :
+					u=1
+					tkinter.messagebox.showinfo("INFO","Bienvenue "+l[1]+" "+l[0])
+					if(l[-1]!='OK') :
+						tkinter.messagebox.showinfo("ALERT!!","vous avez deja voté!!! ")
+						return False
+					l[-1]='NO'
+					def click2():
+						window5.destroy()		
+						D = DB_Dic()
+						choice=v.get()
+						if choice in D:
+							D[choice]+=1
+							stm = f"UPDATE stats SET POINTS = '{D[choice]}' WHERE CODE = '{choice}'"
+							Inser_DB(stm)
+							tkinter.messagebox.showinfo("ALERT!!","Merci pour votre vote!")
+							stm = f"UPDATE personnes SET STATUS='NO' WHERE LOGIN='{l[2]}'"
+							Inser_DB(stm)
+						else:
+							tkinter.messagebox.showinfo("ALERT!!","Contact your administrator to clear results!")
+		else:
+			tkinter.messagebox.showinfo("ERROR!!",str(flag))
 		if(u==0) :
 			tkinter.messagebox.showinfo("ALERT!!","code ou mot de passe incorrecte!")
 			return False
@@ -178,14 +186,17 @@ def Vote():
 def Dic_candidat():
 	c=[]
 	C,flag=Query_DB("SELECT * FROM candidats")
-	i=1
-	for line in C:
-		i+=1
-		c.append(line[0])
-	D={}
-	for e in c:
-		D[e]=0
-	return D
+	if flag == True:
+		i=1
+		for line in C:
+			i+=1
+			c.append(line[0])
+		D={}
+		for e in c:
+			D[e]=0
+		return D
+	else:
+		tkinter.messagebox.showinfo("ERROR!!",str(flag))
 
 
 
@@ -199,10 +210,13 @@ def Dic_candidat_DB(D = Dic_candidat()):
 
 def DB_Dic():
 	A,flag = Query_DB("SELECT CODE,POINTS FROM stats")
-	D={}
-	for a in A:
-		D[a[0]] = a[1]
-	return D
+	if flag == True:
+		D={}
+		for a in A:
+			D[a[0]] = a[1]
+		return D
+	else:
+		tkinter.messagebox.showinfo("ERROR!!",str(flag))
 
 def clear_():
 	D=Dic_candidat()
