@@ -254,10 +254,10 @@ def clear_():
 def prcp_gui(background_color):
 	window.resizable(0, 0)
 	Button(window,font=button_font,fg="white",bg=button_color,width=20,text="Inscription",command=Inscription).place(x=20,y=170)
-	Button(window,font=button_font,fg="white",bg=button_color,width=20,text="Liste codes --> candidat",command=Liste_Candidat).place(x=420,y=170)
+	Button(window,font=button_font,fg="white",bg=button_color,width=20,text="Liste: code --> candidat",command=Liste_Candidat).place(x=420,y=170)
 	Button(window,font=button_font,fg="white",bg=button_color,width=20,text="Voter",command=Vote).place(x=20,y=220)
 	Button(window,font=button_font,fg="white",bg=button_color,width=20,text="Statistiques",command=Statistiques).place(x=420,y=225)
-	Button(window,font=button_font,fg="white",bg=button_color,width=20,text="Clear Result",command=clear_).place(x=220,y=280)
+	#Button(window,font=button_font,fg="white",bg=button_color,width=20,text="Clear Result",command=clear_).place(x=220,y=280)
 
 background_color="#32a6a8"
 button_color="#576161"
