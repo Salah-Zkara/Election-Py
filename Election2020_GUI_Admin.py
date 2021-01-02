@@ -1,13 +1,16 @@
 import random
 from hashlib import md5
-import pickle
 from tkinter import *
 from PIL import ImageTk, Image
 import tkinter.messagebox
 import cx_Oracle
 
+F=open('./.resources/connection.txt','r')
+global connection_string
+connection_string = F.read()
+F.close()
+
 def Query_DB(query):
-	connection_string = "system/salah2001@localhost/SALZKARA"
 	connection = None
 	res = None
 	flag = False
@@ -30,7 +33,6 @@ def Query_DB(query):
 		return res,flag
 
 def Inser_DB(stm):
-	connection_string = "system/salah2001@localhost/SALZKARA"
 	connection = None
 	flag = False
 	try:
@@ -81,13 +83,14 @@ def Add_Elected():
 				flag = Inser_DB(stm)
 				if flag == True:
 					tkinter.messagebox.showinfo("INFO!!","ajouté avec succès")
+					clear_()
 				else:
 					tkinter.messagebox.showinfo("ERROR!!",str(flag))
 			else:
 				tkinter.messagebox.showinfo("ERROR!!",str(flag))
 			window2.destroy()
 
-	window2 =Tk()
+	window2 =Toplevel()
 	window2.title("Ajouter un candidat")
 	window2.configure(background="#32a6a8")
 	window2.geometry("270x180")
@@ -131,6 +134,7 @@ def Delete_cand():
 					tkinter.messagebox.showinfo("ERROR!!",str(flag))
 		j = j - i
 		tkinter.messagebox.showinfo("ALERT!!",str(j)+" candidats supprimer avec succès")
+		clear_()
 		window5.destroy()
 		
 	def sel_all():

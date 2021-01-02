@@ -1,58 +1,15 @@
 import random
 from hashlib import md5
-import pickle
 from tkinter import *
 from PIL import ImageTk, Image
 import tkinter.messagebox
 import cx_Oracle
+from Election2020_GUI_Admin import Query_DB,Inser_DB
 
-
-
-
-def Query_DB(query):
-    connection_string = "system/salah2001@localhost/SALZKARA"
-    connection = None
-    res = None;
-    try:
-		#create connection
-	    connection = cx_Oracle.connect(connection_string)
-	    cur = connection.cursor()
-	    cur.execute(query)
-	    res = cur.fetchall()
-    except cx_Oracle.Error as error:
-	    print(error)
-
-
-    finally:
-	    # release the connection
-	    if connection:
-	    	connection.close()
-	    return res
-
-
-
-def Inser_DB(stm):
-	connection_string = "system/salah2001@localhost/SALZKARA"
-	connection = None
-	try:
-		#create connection
-		connection = cx_Oracle.connect(connection_string)
-		cur = connection.cursor()
-		cur.execute(stm)
-		#cur.execute("commit")
-	except cx_Oracle.Error as error:
-		print(error)
-
-	finally:
-		# release the connection
-		if connection:
-			connection.commit()
-			#print("OK")
-			cur.close()
-			connection.close()
-
-
-
+F=open('./.resources/connection.txt','r')
+global connection_string
+connection_string = F.read()
+F.close()
 
 def randomPass():
 	
@@ -68,7 +25,7 @@ def Inscription():
 	def Inscription_(Lname,Fname):
 		Lname=Lname.upper()
 		Fname=Fname.upper()
-		result = Query_DB("SELECT * FROM personnes")
+		result,flag = Query_DB("SELECT * FROM personnes")
 		for line in result:
 			if (line[0]==Lname) and (line[1]==Fname):
 				return False
@@ -80,7 +37,8 @@ def Inscription():
 			tkinter.messagebox.showinfo("ALERT!!","vous etes deja inscrit!")
 			window2.destroy()
 		else:
-			i=int(Query_DB("SELECT COUNT(*) FROM personnes")[0][0])+1
+			num,flag = Query_DB("SELECT COUNT(*) FROM personnes")
+			i=int(num[0][0])+1
 			if(i<10) :
 				code='E00'+str(i)
 			elif(i<100):
@@ -91,7 +49,7 @@ def Inscription():
 			stm = f"INSERT INTO personnes VALUES('{Lname}','{Fname}','{code}','{str(md5(paswd.encode()).hexdigest())}','OK')"
 			Inser_DB(stm)
 			
-			window4= Tk()
+			window4= Toplevel()
 			window4.geometry("250x100")
 			window4.title("INFO!!")
 			window4.resizable(0,0)
@@ -104,7 +62,7 @@ def Inscription():
 			window2.destroy()
 			window4.iconbitmap('./.resources/Team-Male.ico')
 			window4.mainloop()
-	window2 =Tk()
+	window2 =Toplevel()
 	window2.title("Inscription")
 	window2.configure(background="#32a6a8")
 	window2.geometry("270x180")
@@ -120,7 +78,7 @@ def Inscription():
 	window2.mainloop()
 
 def Liste_Candidat():
-	F=Query_DB("SELECT * FROM candidats")
+	F,flag=Query_DB("SELECT * FROM candidats")
 	i=1
 	R=""
 	for line in F:
@@ -132,18 +90,20 @@ def Liste_Candidat():
 
 def Statistiques():
 	D = DB_Dic()
-
-
-	n=Query_DB("SELECT SUM(POINTS) FROM stats")[0][0]
+	n,flag=Query_DB("SELECT SUM(POINTS) FROM stats")
+	n = n[0][0]
 	if(n==0) :
 		n=1
-	A = Query_DB("SELECT * FROM candidats")
-	i=1
-	R=""
-	for a in A:
-		R+=a[1]+" "+a[2]+"  --> "+str(D['C'+str(i)])+" votes "+str(D['C'+str(i)]*100/n)+"%"+'\n'
-		i+=1
-	tkinter.messagebox.showinfo("Statistiques",R)
+	A,flag = Query_DB("SELECT * FROM candidats")
+	if flag == True:
+		i=1
+		R=""
+		for a in A:
+			R+=a[1]+" "+a[2]+"  --> "+str(D['C'+str(i)])+" votes "+str(D['C'+str(i)]*100/n)+"%"+'\n'
+			i+=1
+		tkinter.messagebox.showinfo("Statistiques",R)
+	else:
+		tkinter.messagebox.showinfo("ERROR!!",str(flag))
 
 
 def Vote():
@@ -152,7 +112,7 @@ def Vote():
 		code=textentry1.get().upper()
 		paswd=str(md5(textentry2.get().upper().encode()).hexdigest())
 		window3.destroy()
-		F=Query_DB("SELECT * FROM personnes")
+		F,flag=Query_DB("SELECT * FROM personnes")
 		u=0
 		for line in F:
 			l = list(line)
@@ -181,7 +141,7 @@ def Vote():
 			tkinter.messagebox.showinfo("ALERT!!","code ou mot de passe incorrecte!")
 			return False
 		n=Liste_Candidat()
-		window5 = Tk()
+		window5 = Toplevel()
 		window5.resizable(0, 0)
 		window5.title("Vote")
 		window5.iconbitmap('./.resources/vote.ico')
@@ -199,7 +159,7 @@ def Vote():
 		Button(window5,font="none 9 italic",fg="white",bg="black",text="VOTE",command=click2).pack()
 		window5.mainloop()
 
-	window3 = Tk()
+	window3 = Toplevel()
 	window3.resizable(0, 0)
 	window3.title("Login")
 	window3.iconbitmap('./.resources/Team-Male.ico')
@@ -217,7 +177,7 @@ def Vote():
 	
 def Dic_candidat():
 	c=[]
-	C=Query_DB("SELECT * FROM candidats")
+	C,flag=Query_DB("SELECT * FROM candidats")
 	i=1
 	for line in C:
 		i+=1
@@ -238,7 +198,7 @@ def Dic_candidat_DB(D = Dic_candidat()):
 
 
 def DB_Dic():
-	A = Query_DB("SELECT CODE,POINTS FROM stats")
+	A,flag = Query_DB("SELECT CODE,POINTS FROM stats")
 	D={}
 	for a in A:
 		D[a[0]] = a[1]
