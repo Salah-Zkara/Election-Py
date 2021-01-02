@@ -244,7 +244,7 @@ def Dic_candidat_DB(D = Dic_candidat()):
 	Inser_DB("DELETE FROM stats")
 	for e in D:
 		stm = f"INSERT INTO stats VALUES('{e}','{D[e]}','NO')"
-		Inser_DB(stm)
+		print(Inser_DB(stm))
 
 
 def DB_Dic():
@@ -256,7 +256,7 @@ def DB_Dic():
 
 def clear_():
 	D=Dic_candidat()
-	flag = Dic_candidat_DB()
+	flag = Dic_candidat_DB(D)
 	if flag == False:
 		tkinter.messagebox.showinfo("ERROR!!","Error!!")
 		return False

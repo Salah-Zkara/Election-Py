@@ -153,7 +153,7 @@ def Statistiques():
 		i=1
 		R=""
 		for a in A:
-			R+=a[1]+" "+a[2]+"  --> "+str(D['C'+str(i)])+" votes "+str(D['C'+str(i)]*100/n)+"%"+'\n'
+			R+=str(a[1])+" "+str(a[2])+"  --> "+str(D['C'+str(i)])+" votes "+str(D['C'+str(i)]*100/n)+"%"+'\n'
 			i+=1
 		tkinter.messagebox.showinfo("Statistiques",R)
 	else:
