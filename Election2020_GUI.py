@@ -4,12 +4,60 @@ from tkinter import *
 from PIL import ImageTk, Image
 import tkinter.messagebox
 import cx_Oracle
-from Election2020_GUI_Admin import Query_DB,Inser_DB
 
 F=open('./.resources/connection.txt','r')
 global connection_string
 connection_string = F.read()
 F.close()
+
+
+
+def Query_DB(query):
+	connection = None
+	res = None
+	flag = False
+	try:
+		#create connection
+		connection = cx_Oracle.connect(connection_string)
+		cur = connection.cursor()
+		cur.execute(query)
+		res = cur.fetchall()
+		flag = True
+	except cx_Oracle.Error as error:
+		print(error)
+		flag = error
+
+
+	finally:
+		# release the connection
+		if connection:
+			connection.close()
+		return res,flag
+
+def Inser_DB(stm):
+	connection = None
+	flag = False
+	try:
+		#create connection
+		connection = cx_Oracle.connect(connection_string)
+		cur = connection.cursor()
+		cur.execute(stm)
+		#cur.execute("commit")
+		flag = True
+	except cx_Oracle.Error as error:
+		print(error)
+		flag = error
+
+	finally:
+		# release the connection
+		if connection:
+			connection.commit()
+			#print("OK")
+			cur.close()
+			connection.close()
+		return flag
+
+
 
 def randomPass():
 	
