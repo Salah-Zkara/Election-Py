@@ -40,7 +40,6 @@ def Inser_DB(stm):
 		connection = cx_Oracle.connect(connection_string)
 		cur = connection.cursor()
 		cur.execute(stm)
-		#cur.execute("commit")
 		flag = True
 	except cx_Oracle.Error as error:
 		print(error)
@@ -50,7 +49,6 @@ def Inser_DB(stm):
 		# release the connection
 		if connection:
 			connection.commit()
-			#print("OK")
 			cur.close()
 			connection.close()
 		return flag
@@ -244,7 +242,7 @@ def Dic_candidat_DB(D = Dic_candidat()):
 	Inser_DB("DELETE FROM stats")
 	for e in D:
 		stm = f"INSERT INTO stats VALUES('{e}','{D[e]}','NO')"
-		print(Inser_DB(stm))
+		Inser_DB(stm)
 
 
 def DB_Dic():
