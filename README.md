@@ -41,15 +41,15 @@ to run the program you have to install the required modules so open the terminal
 ### Oracle Tables setup
 - First of all, you should have [ORACLE](https://www.oracle.com/database/) database installed and working on your computer.
 - Modify the connection string with yours, which is located in **"./.resources/connection.txt"** like the follow: **"username/password@localhost/ServiceName"**.
-- run installDB.py file and click install to create the required tables.
+- Run installDB.py file and click install to create the required tables.
 `$ python installDB.py`
 **or**
 `$ python3 installDB.py`
-- run Election2020_GUI_Admin.py file and add the wanted elected persons.
+- Run Election2020_GUI_Admin.py file and add the wanted elected persons.
 `$ python Election2020_GUI_Admin.py`
 **or**
 `$ python3 Election2020_GUI_Admin.py`
-- you can add/delete the elected persons and users with the Election2020_GUI_Admin interface!
+- You can add/delete the elected persons and users with the Election2020_GUI_Admin interface!
 
 
 ## Execution
