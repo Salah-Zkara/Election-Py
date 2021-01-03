@@ -90,7 +90,7 @@ def Add_Elected():
 
 	window2 =Toplevel()
 	window2.title("Ajouter un candidat")
-	window2.configure(background="#32a6a8")
+	window2.configure(background="#ebd034")
 	window2.geometry("270x180")
 	window2.resizable(0, 0)
 	window2.iconbitmap('./.resources/Team-Male.ico')
@@ -146,7 +146,7 @@ def Delete_cand():
 	window5 = Toplevel()
 	window5.resizable(0, 0)
 	window5.title("Candidats")
-	window5.iconbitmap('./.resources/vote.ico')
+	window5.iconbitmap('./.resources/gear.ico')
 	window5.configure(background=background_color)
 	Label(window5,text="veuillez selectionnez les candidats a supprimer",bg=background_color).pack()
 	D = {}
@@ -197,7 +197,7 @@ def Delete_users():
 	window5 = Toplevel()
 	window5.resizable(0, 0)
 	window5.title("Utilisateurs")
-	window5.iconbitmap('./.resources/vote.ico')
+	window5.iconbitmap('./.resources/gear.ico')
 	window5.configure(background=background_color)
 	Label(window5,text="veuillez selectionnez les utilisateurs a supprimer",bg=background_color).pack()
 	D = {}
