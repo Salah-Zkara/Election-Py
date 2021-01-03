@@ -38,11 +38,8 @@ to run the program you have to install the required modules so open the terminal
 
 `$ pip3 install -r requirements.txt`
 ## Execution
-you can modify the elected persons with the Election2020_GUI_Admin interface.
-```
-Login: root
-Password: toor
-```
+you can add/delete the elected persons and users with the Election2020_GUI_Admin interface.
+
 ### GUI
 #### - Windows
 `$ python Election2020_GUI.py`
