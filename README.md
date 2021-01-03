@@ -64,12 +64,13 @@ to run the program you have to install the required modules so open the terminal
 `$ python3 Election2020_GUI.py`
 #### - Linux
 **Linux version coming soon!**
-
+<!--
 `$ python Election2020_GUI_linux.py`
 
 **or** 
 
 `$ python3 Election2020_GUI_linux.py`
+-->
 ## Links
 [![](https://img.shields.io/badge/My-Portfolio-brightgreen)](https://salah-zkara.codes/)
 
