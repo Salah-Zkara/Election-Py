@@ -274,15 +274,15 @@ def prcp_gui(background_color):
 
 
 
-background_color="#32a6a8"
-button_color="#576161"
+background_color="#ebd034"
+button_color="#f80000"
 button_font="none 12 bold"
 window = Tk()
 window.geometry("653x350")
 window.title("Election 2020 Admin Dashboard by ZKARA(©)")
 window.configure(background=background_color)
-window.iconbitmap('./.resources/vote.ico')
-imge=Image.open("./.resources/Team Male.png")
+window.iconbitmap('./.resources/gear.ico')
+imge=Image.open("./.resources/admin.png")
 photo=ImageTk.PhotoImage(imge)
 lab=Label(image=photo,bg=background_color)
 lab.place(x=272,y=20)
