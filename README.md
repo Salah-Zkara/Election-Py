@@ -38,7 +38,9 @@ to run the program you have to install the required modules so open the terminal
 
 `$ pip3 install -r requirements.txt`
 ## Execution
-you can add/delete the elected persons and users with the Election2020_GUI_Admin interface.
+- First of all, you should have [ORACLE](https://www.oracle.com/database/) database installed and working on your computer.
+- Modify the connection string with yours, which is located in **./.resources/connection.txt** like follow: **"username/password@localhost/ServiceName"**.
+- you can add/delete the elected persons and users with the Election2020_GUI_Admin interface.
 
 ### GUI
 #### - Windows
