@@ -93,7 +93,7 @@ def Add_Elected():
 	window2.configure(background="#ebd034")
 	window2.geometry("270x180")
 	window2.resizable(0, 0)
-	window2.iconbitmap('./.resources/Team-Male.ico')
+	window2.iconbitmap('./.resources/gear.ico')
 	Label(window2,text="Nom:",bg=background_color).place(x=10,y=10)
 	textentry1= Entry(window2,bg="white",width=38)
 	textentry1.place(x=10,y=30)
